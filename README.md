@@ -122,7 +122,7 @@ Of course, as always, this is subjective.
 
 [colour_palettes.json](colour_palettes.json) has the same colours, but as json.  
 You can get each palette from this file using
-```json
-// n is the number of colours you need in your palette
+```python
+# n is the number of colours you need in your palette
 colour["palettes"][n]
 ```
