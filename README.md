@@ -31,7 +31,7 @@ I mostly accepted all the colours, except:
 - Colours which are too light to use as a background with white text
 
 There are ~230 colours in the shortlist.  
-You can see them in [all_colours.html](all_colours.html)
+You can see them in [all_colours.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/all_colours.html)
 
 It's worth noting that many are quite similar!
 
@@ -61,7 +61,7 @@ I can understand why the algorithm did it like this - it seems like they're all 
 
 But I want to do better.
 
-(if you're curious, you can see the results with N=15 using RGB in [clustered_colours_rgb.html](clustered_colours_rgb.html))
+(if you're curious, you can see the results with N=15 using RGB in [clustered_colours_rgb.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/clustered_colours_rgb.html))
 
 ### Solution: Better Colour Representation
 Wow... colour theory is a rabbit hole.
@@ -118,7 +118,7 @@ Of course, as always, this is subjective.
 
 
 ## Colour Palettes of for N <= 40
-[colour_palettes.html](colour_palettes.html) has the colour palettes generated using this methodology (K-means on `L*a*b`) for each palette size from 1 to 40.
+[colour_palettes.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/colour_palettes.html) has the colour palettes generated using this methodology (K-means on `L*a*b`) for each palette size from 1 to 40.
 
 [colour_palettes.json](colour_palettes.json) has the same colours, but as json.  
 You can get each palette from this file using
