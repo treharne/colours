@@ -85,6 +85,8 @@ This *substantially* improved the groupings:
 ![Good blue cluster using LAB](media/lab_good_cluster_blue.png)
 ![Good orange cluster using LAB](media/lab_good_cluster_orange.png)
 
+You can see the result with N=15 using `L*a*b` colours in [clustered_colours.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/clustered_colours_rgb.html)
+
 ## Choose a colour from each Palette
 There are a few obvious approaches here:
 - Randomly choose a colour from each group
@@ -104,19 +106,19 @@ This might be worth revisiting.
 ## Random vs RGB vs `L*a*b`
 **Random colours from Shortlist**  
 
-![Random Palette](media/random_centres.png)
+[![Random Palette](media/random_centres.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/random_colours.html)
 
 Quite a few colours have very close pairs.
 
 **RGB + K-means**  
 
-![RGB Palette](media/rgb_centres.png)
+[![RGB Palette](media/rgb_centres.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/clustered_colours_rgb.html)
 
 Some close pairs
 
 **`L*a*b` + K-means**  
 
-![LAB Palette](media/lab_centres.png)
+[![LAB Palette](media/lab_centres.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/clustered_colours.html)
 
 
 Fewer close pairs. Pinks and browns are arguably worse than RGB. Greens, blues, yellows definitely better than RGB.
@@ -124,10 +126,10 @@ Fewer close pairs. Pinks and browns are arguably worse than RGB. Greens, blues, 
 Of course, as always, this is subjective.
 
 
-## Colour Palettes of for N <= 40
+## Colour Palettes for N <= 40
 [colour_palettes.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/colour_palettes.html) has the colour palettes generated using this methodology (K-means on `L*a*b`) for each palette size from 1 to 40.
 
-![Palettes](media/palettes.png)
+[![Palettes](media/palettes.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/colour_palettes.html)
 
 [colour_palettes.json](colour_palettes.json) has the same colours, but as json.  
 You can get each palette from this file using
