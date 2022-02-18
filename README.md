@@ -25,15 +25,18 @@ Of course, this is subjective, but I can at least remove jarring colours (like #
 I hand picked colours from a [Canva article with 100 colour palettes](https://www.canva.com/learn/100-color-combinations/)
 and put them in [colours.py](colours.py)
 
+[![Colours Page](media/all_colours.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/all_colours.html)
+This is about half of the ~230 colours. It's worth noting that many are quite similar!
+
+You can see them in [all_colours.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/all_colours.html)
 
 I mostly accepted all the colours, except:
 - Whites, greys and blacks, since they're boring
 - Colours which are too light to use as a background with white text
 
-There are ~230 colours in the shortlist.  
-You can see them in [all_colours.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/all_colours.html)
 
-It's worth noting that many are quite similar!
+
+
 
 
 ## Group the colours
@@ -59,7 +62,8 @@ The goal of this project is to get colours that are visually distinct into diffe
 
 I can understand why the algorithm did it like this - it seems like they're all fairly dark colours on the left, or fairly light colours on the right.
 
-But I want to do better.
+But I want to do better.  
+It doesn't seem correct to have navy, mustard, purple, dark green, and red-wine in the same cluster.
 
 (if you're curious, you can see the results with N=15 using RGB in [clustered_colours_rgb.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/clustered_colours_rgb.html))
 
@@ -88,6 +92,9 @@ There are a few obvious approaches here:
 - Take the median of each group (what does this mean?)
 
 Since I was using K-means, the simplest was to take the mean.
+
+I'm not completely happy with this, since it means that my final colours are *not* colours that I originally put in the shortlist.  
+This might be worth revisiting.
 
 
 
@@ -119,6 +126,8 @@ Of course, as always, this is subjective.
 
 ## Colour Palettes of for N <= 40
 [colour_palettes.html](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/colour_palettes.html) has the colour palettes generated using this methodology (K-means on `L*a*b`) for each palette size from 1 to 40.
+
+![Palettes](media/palettes.png)
 
 [colour_palettes.json](colour_palettes.json) has the same colours, but as json.  
 You can get each palette from this file using
