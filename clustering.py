@@ -40,6 +40,22 @@ def fit_kmeans(hex_colours, n):
     colours = np.array([hex_to_lab(colour) for colour in hex_colours])
     return KMeans(n_clusters=n, random_state=0).fit(colours)
 
+def distance(lab1, lab2):
+    return np.linalg.norm(lab1 - lab2)
+
+def colour_distances(base_colour, colours):
+    base_colour_lab = hex_to_lab(base_colour)
+    colours_lab = (hex_to_lab(colour) for colour in colours)
+    return [distance(base_colour_lab, colour_lab) for colour_lab in colours_lab]
+
+def nearest_colour(base_colour, colours):
+    distances = colour_distances(base_colour, colours)
+    return colours[np.argmin(distances)]
+
+def nearest_colours(base_colour, colours, n=10):
+    distances = colour_distances(base_colour, colours)
+    return sorted(colours, key=lambda colour: distances[colours.index(colour)])[:n]
+
 def get_clusters_from_model(colours, model):
     clusters = defaultdict(list)
     for colour, cluster in zip(colours, model.labels_):
@@ -48,5 +64,11 @@ def get_clusters_from_model(colours, model):
     sorted_clusters = dict(sorted(clusters.items()))
     return sorted_clusters.values()
 
-def get_centres_from_model(model):
+def get_means_from_model(model):
     return [lab_to_hex(centre) for centre in model.cluster_centers_]
+
+def get_cluster_medians(means, clusters):
+    return [
+        nearest_colour(mean, cluster) 
+        for mean, cluster in zip(means, clusters)
+    ]

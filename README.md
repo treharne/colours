@@ -35,7 +35,23 @@ I mostly accepted all the colours, except:
 - Colours which are too light to use as a background with white text
 
 
+## Removing map-like colours
+By default, we use this map from [Maptiler](https://www.maptiler.com/maps/#basic//vector)
 
+[![Base map](media/map_colours.png)](https://www.maptiler.com/maps/#basic//vector)
+
+So we want to avoid colours that are too visually similar to the blue and green used in it.
+
+[![Maplike blue](media/maplike_blue.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/maplike_colours.html)
+
+[![Maplike green](media/maplike_green.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/maplike_colours.html)
+
+Since I already had in mind not to choose map-like colours, we don't have too many that are too close. But these are the closest ones using euclidean distance on `L*a*b` colours (read on to find out what that is!).
+
+I manually removed some of these maplike colours from our shortlist.
+
+**Can't you just change the map style?**  
+Yes, our users can change the map style that they use. But we just want to make sure our colours work well with the default one, since thats what most users use.
 
 
 
@@ -98,6 +114,7 @@ Since I was using K-means, the simplest was to take the mean.
 I'm not completely happy with this, since it means that my final colours are *not* colours that I originally put in the shortlist.  
 This might be worth revisiting.
 
+**Update:** Now we're using medians. There is very little change to the palettes generated, but all colours are shortlist colours.
 
 
 # Results
@@ -137,3 +154,8 @@ You can get each palette from this file using
 # n is the number of colours you need in your palette
 colour["palettes"][n]
 ```
+
+
+# To do
+- Bias toward "pastel" colours for small N
+- Add images of the final result routes on map
