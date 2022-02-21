@@ -128,9 +128,9 @@ So I split the colours into a few groups (HSV colour representation was useful f
 - Strong Dark Colours
 - Dull Colours
 
-![Pastel](media/pastel_colours.png)
-![Bright Pastel](media/bright_pastel_colours.png)
-![Bright](media/bright_colours.png)
+[![Pastel](media/pastel_colours.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/filtered_colours.html)
+[![Bright Pastel](media/bright_pastel_colours.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/filtered_colours.html)
+[![Bright](media/bright_colours.png)](https://htmlpreview.github.io/?https://github.com/treharne/colours/blob/main/filtered_colours.html)
 
 I like some of these groups more than others, so I only fed a subset of them to the clustering algorithm when we only need to generate a small number of colours.
 
@@ -203,6 +203,12 @@ You can get each palette from this file using
 colour["palettes"][n]
 ```
 
+
+# Bonus: 3D Visualisation of `L*a*b` colour representation
+![3D Colour Visualisation](media/rotate_colours.gif)
+
+
+I had quite a few problems getting this working, but if you can run the ipython notebook on your machine, and correctly install some agg QT image thing, then it might work.
 
 # To do
 - Add images of the final result routes on map
