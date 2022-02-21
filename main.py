@@ -1,18 +1,20 @@
 import json
 import random
+import filters
+from bs4 import BeautifulSoup as bs
+
 from colours import COLOURS
-from clustering import fit_kmeans, get_cluster_medians, get_means_from_model, get_clusters_from_model, nearest_colours
+from clustering import fit_kmeans, fit_spectral, get_cluster_medioids, get_means_from_kmeans, get_clusters_from_model, get_means_from_spectral, nearest_colours
 
 
 def cell(colour):
-    return "<td style='background-color: " + colour + "; color: #ffffff', width=150, align=center>" + colour + "</td>"
+    return "<td style='background-color: " + colour + "; color: #ffffff' width=150 align=center>" + colour + "</td>"
 
 def row(cells):
-    return "<tr height=150>" + ''.join(cells) + "</tr>"
-
+    return "<tr height=150 align=center>" + ''.join(cells) + "</tr>"
 
 def colours_grid(colours, n_cols=5):
-    table = "<table align=centre>"
+    table = "<table align=center>"
     row_cells = []
     for i, colour in enumerate(colours):
         row_cells.append(cell(colour))
@@ -32,7 +34,7 @@ def html_boilerplate(body):
     <head>
     <title>Colours</title>
     </head>
-    <body style='font-family: sans-serif' align=centre>
+    <body style='font-family: sans-serif' align=center>
     """
     html_page += body
     html_page += """
@@ -41,60 +43,115 @@ def html_boilerplate(body):
     """
     return html_page
 
+def write(body, filename):
+    with open(filename, "w") as file:
+        file.write(body)
+
+def write_html(body, filename):
+    soup = bs(body, features="html.parser")
+    html = soup.prettify()
+    write(html, filename)
 
 def write_colours_page(colours, filename="all_colours.html"):
     html = html_boilerplate(colours_grid(colours, n_cols=15))
-    with open(filename, "w") as file:
-        file.write(html)
+    write_html(html, filename)
 
 def write_random_colours_page(colours, n, filename="random_colours.html"):
     n_random_colours = random.sample(colours, n)
     write_colours_page(n_random_colours, filename)
 
-def write_clustered_colours_page(colours, n, filename="clustered_colours.html"):
+
+def write_kmeans_clustered_colours_page(colours, n, filename="kmeans_clustered_colours.html"):
     model = fit_kmeans(colours, n)
     clusters = get_clusters_from_model(colours, model)
-    means = get_means_from_model(model)
-    medians = get_cluster_medians(means, clusters)
+    means = get_means_from_kmeans(model)
+    medioids = get_cluster_medioids(means, clusters)
 
-    body = "<h1>Clustered colours</h1>"
+    body = "<h1>K-Means Clustered colours</h1>"
     body += "<h2>Centres</h2>"
     body += colours_grid(means)
-    for cluster, mean, median in zip(clusters, means, medians):
+    for cluster, mean, medioid in zip(clusters, means, medioids):
         body += "<h2>Cluster</h2>"
-        body += "Mean, Median"
-        body += colours_grid([mean, median])
+        body += "Mean, Medioid"
+        body += colours_grid([mean, medioid])
         body += "Colours"
         body += colours_grid(cluster)
 
     html = html_boilerplate(body)
-    with open(filename, "w") as file:
-        file.write(html)
+    write_html(html, filename)
 
-def write_palettes_page(colours, max_n, filename="colour_palettes.html"):
-    body = "<h1>Colour palettes</h1>"
-    for n in range(1, max_n+1):
-        model = fit_kmeans(colours, n)
-        centres = get_means_from_model(model)
-        body += "<h2>Palette of " + str(n) + " colours</h2>"
-        body += colours_grid(centres)
+
+def write_spectral_clustered_colours_page(colours, n, filename="spectral_clustered_colours.html"):
+    model = fit_spectral(colours, n)
+    clusters = get_clusters_from_model(colours, model)
+    means = get_means_from_spectral(clusters)
+    medioids = get_cluster_medioids(means, clusters)
+
+    body = "<h1>Spectral clustered colours</h1>"
+    body += "<h2>Centres</h2>"
+    body += colours_grid(means)
+
+    for cluster, mean, medioid in zip(clusters, means, medioids):
+        body += "<h2>Cluster</h2>"
+        body += "Mean, Medioid"
+        body += colours_grid([mean, medioid])
+        body += "Colours"
+        body += colours_grid(cluster)
 
     html = html_boilerplate(body)
-    with open(filename, "w") as file:
-        file.write(html)
+    write_html(html, filename)
 
-def write_palettes_json(colours, max_n, filename="colour_palettes.json"):
+
+def write_palettes_json(all_colours, max_n, filename="colour_palettes.json"):
     palettes = [[]]
     for n in range(1, max_n+1):
+        colours = filters.filter_allowed_colours(n, all_colours)
         model = fit_kmeans(colours, n)
-        means = get_means_from_model(model)
+
+        means = get_means_from_kmeans(model)
         clusters = get_clusters_from_model(colours, model)
-        medians = get_cluster_medians(means, clusters)
-        palettes.append(medians)
+        medioids = get_cluster_medioids(means, clusters)
+
+        palettes.append(medioids)
 
     body = {"palettes": palettes}
-    with open(filename, "w") as file:
-        file.write(json.dumps(body))
+
+    write(json.dumps(body), filename)
+
+def write_palettes_page(all_colours, max_n, filename="filtered_palettes.html"):
+    body = "<h1>Filtered palettes</h1>"
+    body += "<table align=center>"
+
+    body += "<tr align=center><td align=center valign=top>"
+    body += "<h1>K-Means</h1>"
+
+    for n in range(1, max_n+1):
+        colours = filters.filter_allowed_colours(n, all_colours)
+        model = fit_kmeans(colours, n)
+        clusters = get_clusters_from_model(colours, model)
+        means = get_means_from_kmeans(model)
+        medioids = get_cluster_medioids(means, clusters)
+
+        body += "<h2>Palette of " + str(n) + " colours</h2>"
+        body += colours_grid(medioids)
+
+    body += "</td><td align=center valign=top>"
+    body += "<h1>Spectral</h1>"
+
+    for n in range(1, max_n+1):
+        colours = filters.filter_allowed_colours(n, all_colours)
+        model = fit_spectral(colours, n)
+        clusters = get_clusters_from_model(colours, model)
+        means = get_means_from_spectral(clusters)
+        medioids = get_cluster_medioids(means, clusters)
+        body += "<h2>Palette of " + str(n) + " colours</h2>"
+        body += colours_grid(medioids)
+
+    body += "</td></tr></table>"
+
+    html = html_boilerplate(body)
+
+    write_html(html, filename)
 
 
 def write_maplike_colours_page(colours, filename="maplike_colours.html"):
@@ -113,14 +170,41 @@ def write_maplike_colours_page(colours, filename="maplike_colours.html"):
     body += colours_grid(nearest_colours(map_green, colours, n=15))
 
     html = html_boilerplate(body)
-    with open(filename, "w") as file:
-        file.write(html)
+
+    write_html(html, filename)
+
+
+def write_filtered_colours_page(colours, filename="filtered_colours.html"):
+    body = "<h1>Colours filtered by certain properties</h1>"
+
+    body += "<h2>Pastel colours</h2>"
+    body += colours_grid(c for c in colours if filters.is_pastel(c))
+
+    body += "<h2>Bright Pastel colours</h2>"
+    body += colours_grid(c for c in colours if filters.is_bright_pastel(c))
+
+
+    body += "<h2>Bright colours</h2>"
+    body += colours_grid(c for c in colours if filters.is_bright(c))
+
+    body += "<h2>Strong Dark colours</h2>"
+    body += colours_grid(c for c in colours if filters.is_strong_dark(c))
+
+    body += "<h2>Dull colours</h2>"
+    body += colours_grid(c for c in colours if filters.is_dull(c))
+
+    html = html_boilerplate(body)
+    
+    write_html(html, filename)
+
 
 if __name__ == "__main__":
     write_colours_page(COLOURS)
     write_random_colours_page(COLOURS, 15)
-    write_clustered_colours_page(COLOURS, 15)
-    write_palettes_page(COLOURS, 40)
-    write_palettes_json(COLOURS, 40)
+    write_filtered_colours_page(COLOURS)
+    write_kmeans_clustered_colours_page(COLOURS, 15)
+    write_spectral_clustered_colours_page(COLOURS, 15)
     write_maplike_colours_page(COLOURS)
+    write_palettes_json(COLOURS, 40)
+    write_palettes_page(COLOURS, 40)
 

@@ -1,3 +1,4 @@
+beautifulsoup4==4.10.0
 imageio==2.16.0
 joblib==1.1.0
 networkx==2.6.3
