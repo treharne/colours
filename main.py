@@ -169,6 +169,12 @@ def write_maplike_colours_page(colours, filename="maplike_colours.html"):
     body += "<p>Colours that look like map green</p>"
     body += colours_grid(nearest_colours(map_green, colours, n=15))
 
+    map_gold = '#DAD6C0'
+    body += "<h2>Map gold</h2>"
+    body += colours_grid([map_gold])
+    body += "<p>Colours that look like map gold</p>"
+    body += colours_grid(nearest_colours(map_gold, colours, n=15))
+
     html = html_boilerplate(body)
 
     write_html(html, filename)
@@ -194,7 +200,7 @@ def write_filtered_colours_page(colours, filename="filtered_colours.html"):
     body += colours_grid(c for c in colours if filters.is_dull(c))
 
     html = html_boilerplate(body)
-    
+
     write_html(html, filename)
 
 

@@ -1,8 +1,12 @@
 # Choose visually distinct N-sized colour palettes from a list of colours
 In our product, we display driving route lines on a map.
+
+![Routes before project](media/routes_before.png)
+
 Customers usually have between 5 and 30 routes, and by default
 our product automatically chooses the colours for them.
 
+**We want to create the most distinct yet visually apealling palette of colours for these routes, for any given number of routes N.**
 
 ## Colour Palette Criteria
 Colours in a palette must be:
@@ -117,6 +121,10 @@ I'm not completely happy with this, since it means that my final colours are *no
 This might be worth revisiting.
 
 **Update:** Now we're using medians. There is very little change to the palettes generated, but all colours are shortlist colours, which I think is important since you went to the effort of making a shortlist anyway!
+
+**Update 2:** Actually, I was wrong - we're using medioids not medians.  
+- **Median:** Take the median of R, G, then B, and make a new colour (*not necessarily from our shortlist*) from it.  
+- **Medoid:** The most central colour in the cluster
 
 ## Incremental filtered colour palettes
 Subjectively, of all the colours I picked, I like some more than others.
