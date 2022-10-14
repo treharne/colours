@@ -208,7 +208,10 @@ You can see a side-by-side comparison in [filtered_palettes.html](https://htmlpr
 You can get each palette from this file using
 ```python
 # n is the number of colours you need in your palette
-colour["palettes"][n]
+n = 5
+colours = colour["palettes"][n]
+print(colours)
+# ["#CE5A57", "#5EA8A7", "#E59D5C", "#739F3D", "#4D648D"]
 ```
 
 
